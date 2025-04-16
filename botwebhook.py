@@ -114,6 +114,7 @@ async def on_startup(bot: Bot):
 
 async def on_shutdown(bot: Bot):
     await bot.delete_webhook()
+    await bot.session.close()
     print("\u274c Webhook удалён")
 
 async def handle_webhook(request):
