@@ -132,4 +132,9 @@ app.on_shutdown.append(lambda app: on_shutdown(bot))
 
 if __name__ == "__main__":
     web.run_app(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))
+    async def handle_root(request):
+    return web.Response(text="✅ Bot is alive!")
+
+app.router.add_get("/", handle_root)
+
 
