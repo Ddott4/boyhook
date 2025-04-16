@@ -124,10 +124,10 @@ async def handle_webhook(request):
 
 # ==== ЗАПУСК ====
 init_db()
-dp.startup.register(on_startup)
-dp.shutdown.register(on_shutdown)
 app = web.Application()
 app.router.add_post('/webhook', handle_webhook)
+app.on_startup.append(lambda app: on_startup(bot))
+app.on_shutdown.append(lambda app: on_shutdown(bot))
 
 if __name__ == "__main__":
     web.run_app(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))
