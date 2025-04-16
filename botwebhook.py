@@ -105,7 +105,7 @@ async def broadcast(message: Message):
 
 # ==== WEBHOOK ====
 async def on_startup(bot: Bot):
-    webhook_url = os.getenv("https://api.render.com/deploy/srv-cvvuk33uibrs73bqes90?key=0lPniE0mjhU")
+    webhook_url = os.getenv("https://boyhook.onrender.com/")
     await bot.set_webhook(webhook_url)
     print(f"\u2705 Webhook установлен: {webhook_url}")
 
@@ -123,9 +123,3 @@ async def handle_webhook(request):
 init_db()
 dp.startup.register(on_startup)
 dp.shutdown.register(on_shutdown)
-
-app = web.Application()
-app.router.add_post("https://api.render.com/deploy/srv-cvvuk33uibrs73bqes90?key=0lPniE0mjhU", handle_webhook)
-
-if __name__ == "__main__":
-    web.run_app(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
