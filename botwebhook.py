@@ -9,12 +9,15 @@ from aiogram.filters import Command
 from aiogram.client.default import DefaultBotProperties
 
 # ==== НАСТРОЙКИ ====
-BOT_TOKEN = os.getenv("8195781148:AAFc9b8CxrX8a9JYEQvN_hUAyjCNflVC5L8")  # Используем переменную окружения
+BOT_TOKEN = os.getenv("BOT_TOKEN")  # Используем переменную окружения
 CHANNEL_USERNAME = "@GoCrypto10"
 ADMIN_ID = 1580610086
 
-bot = Bot(token="8195781148:AAFc9b8CxrX8a9JYEQvN_hUAyjCNflVC5L8"
-, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+bot = Bot(
+    token=BOT_TOKEN,
+    default=DefaultBotProperties(parse_mode=ParseMode.HTML)
+)
+
 dp = Dispatcher()
 
 # ==== БАЗА ДАННЫХ SQLite ====
@@ -105,7 +108,7 @@ async def broadcast(message: Message):
 
 # ==== WEBHOOK ====
 async def on_startup(bot: Bot):
-    webhook_url = os.getenv("https://boyhook.onrender.com/")
+    webhook_url = os.getenv("WEBHOOK_URL")
     await bot.set_webhook(webhook_url)
     print(f"\u2705 Webhook установлен: {webhook_url}")
 
@@ -123,3 +126,9 @@ async def handle_webhook(request):
 init_db()
 dp.startup.register(on_startup)
 dp.shutdown.register(on_shutdown)
+app = web.Application()
+app.router.add_post('/webhook', handle_webhook)
+
+if __name__ == "__main__":
+    web.run_app(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))
+
