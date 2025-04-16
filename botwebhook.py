@@ -132,12 +132,15 @@ app.on_shutdown.append(lambda app: on_shutdown(bot))
 
 if __name__ == "__main__":
   
-app.router.add_get("/", handle_root)
-
-    web.run_app(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))
-  # ==== ОБРАБОТКА ГЛАВНОЙ СТРАНИЦЫ ДЛЯ UPTIMEROBOT ====
+# ==== ОБРАБОТКА ГЛАВНОЙ СТРАНИЦЫ ДЛЯ ПРОВЕРКИ UPTIME ====
 async def handle_root(request):
     return web.Response(text="✅ Bot is alive!")
+
+app.router.add_get("/", handle_root)
+
+# ==== ЗАПУСК ====
+if __name__ == "__main__":
+    web.run_app(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))
 
    
 
