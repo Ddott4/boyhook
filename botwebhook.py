@@ -123,24 +123,21 @@ async def handle_webhook(request):
     await dp.feed_update(bot, update)
     return web.Response()
 
-# ==== ЗАПУСК ====
-init_db()
-app = web.Application()
-app.router.add_post('/webhook', handle_webhook)
-app.on_startup.append(lambda app: on_startup(bot))
-app.on_shutdown.append(lambda app: on_shutdown(bot))
-
-if __name__ == "__main__":
-  
 # ==== ОБРАБОТКА ГЛАВНОЙ СТРАНИЦЫ ДЛЯ ПРОВЕРКИ UPTIME ====
 async def handle_root(request):
     return web.Response(text="✅ Bot is alive!")
 
-app.router.add_get("/", handle_root)
-
 # ==== ЗАПУСК ====
+init_db()
+app = web.Application()
+app.router.add_post('/webhook', handle_webhook)
+app.router.add_get("/", handle_root)  # для проверки Render
+app.on_startup.append(lambda app: on_startup(bot))
+app.on_shutdown.append(lambda app: on_shutdown(bot))
+
 if __name__ == "__main__":
     web.run_app(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))
+
 
    
 
