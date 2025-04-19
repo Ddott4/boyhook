@@ -1,4 +1,3 @@
-dd, [19.04.2025 12:03]
 import asyncio
 import os
 import sqlite3
