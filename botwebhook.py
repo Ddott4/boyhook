@@ -12,6 +12,7 @@ from aiogram.client.default import DefaultBotProperties
 BOT_TOKEN = os.getenv("BOT_TOKEN")  # Используем переменную окружения
 CHANNEL_USERNAME = "@GoCrypto10"
 ADMIN_ID = 1580610086
+REWARD_LINK = "https://teletype.in/@coinstart/guidestart10"
 
 bot = Bot(
     token=BOT_TOKEN,
@@ -67,7 +68,7 @@ async def cmd_start(message: Message):
     add_user(user_id)
 
     if await is_subscribed(user_id):
-        await message.answer("\u2705 \u0412\u044b \u043f\u043e\u0434\u043f\u0438\u0441\u0430\u043d\u044b! \u0412\u043e\u0442 \u0432\u0430\u0448\u0430 \u0441\u0441\u044b\u043b\u043a\u0430:\nhttps://teletype.in/@coinstart/bszS77gLhb")
+        await message.answer(f"✅ Вы подписаны! Вот ваша ссылка:\n{REWARD_LINK}")
     else:
         await message.answer(
             f"\u2757 \u0427\u0442\u043e\u0431\u044b \u043f\u043e\u043b\u0443\u0447\u0438\u0442\u044c \u0434\u043e\u0441\u0442\u0443\u043f, \u043f\u043e\u0434\u043f\u0438\u0448\u0438\u0442\u0435\u0441\u044c \u043d\u0430 {CHANNEL_USERNAME} \u0438 \u043d\u0430\u0436\u043c\u0438\u0442\u0435 \u043a\u043d\u043e\u043f\u043a\u0443 \u043d\u0438\u0436\u0435:",
@@ -80,7 +81,7 @@ async def handle_check_sub(callback: CallbackQuery):
     user_id = callback.from_user.id
 
     if await is_subscribed(user_id):
-        await callback.message.edit_text("\u2705 \u041f\u043e\u0434\u043f\u0438\u0441\u043a\u0430 \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0430!\n\u0412\u043e\u0442 \u0432\u0430\u0448\u0430 \u0441\u0441\u044b\u043b\u043a\u0430: https://teletype.in/@coinstart/bszS77gLhb")
+       await callback.message.edit_text(f"✅ Подписка подтверждена!\nВот ваша ссылка: {REWARD_LINK}")
     else:
         await callback.answer("\u274c \u0412\u044b \u0435\u0449\u0451 \u043d\u0435 \u043f\u043e\u0434\u043f\u0438\u0441\u0430\u043b\u0438\u0441\u044c", show_alert=True)
 
