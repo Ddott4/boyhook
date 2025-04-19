@@ -95,7 +95,6 @@ async def broadcast(message: Message):
         await message.answer("\u2757 \u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435 \u043f\u043e\u0441\u043b\u0435 \u043a\u043e\u043c\u0430\u043d\u0434\u044b:\n\u041d\u0430\u043f\u0440\u0438\u043c\u0435\u0440: /broadcast \u041f\u0440\u0438\u0432\u0435\u0442 \u0432\u0441\u0435\u043c!")
         return
 
-dd, [19.04.2025 12:03]
 users = get_all_users()
     sent = 0
     for user_id in users:
