@@ -96,9 +96,9 @@ async def broadcast(message: Message):
         return
 
 users = get_all_users()
-    sent = 0
-    for user_id in users:
-        try:
+sent = 0
+for user_id in users:
+    try:
             await bot.send_message(user_id, text)
             sent += 1
         except:
