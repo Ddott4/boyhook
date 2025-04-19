@@ -9,9 +9,10 @@ from aiogram.filters import Command
 from aiogram.client.default import DefaultBotProperties
 
 # ==== НАСТРОЙКИ ====
-BOT_TOKEN = os.getenv("BOT_TOKEN")  # Используем переменную окружения
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 CHANNEL_USERNAME = "@GoCrypto10"
 ADMIN_ID = 1580610086
+REWARD_LINK = "https://teletype.in/@coinstart/guidestart10"
 
 bot = Bot(
     token=BOT_TOKEN,
@@ -49,7 +50,7 @@ def get_all_users():
 
 # ==== КНОПКА ====
 check_sub_button = InlineKeyboardMarkup(inline_keyboard=[
-    [InlineKeyboardButton(text="\ud83d\udd04 \u041f\u0440\u043e\u0432\u0435\u0440\u0438\u0442\u044c \u043f\u043e\u0434\u043f\u0438\u0441\u043a\u0443", callback_data="check_sub")]
+    [InlineKeyboardButton(text="🔄 Проверить подписку", callback_data="check_sub")]
 ])
 
 # ==== ПРОВЕРКА ПОДПИСКИ ====
@@ -67,10 +68,10 @@ async def cmd_start(message: Message):
     add_user(user_id)
 
     if await is_subscribed(user_id):
-        await message.answer("\u2705 \u0412\u044b \u043f\u043e\u0434\u043f\u0438\u0441\u0430\u043d\u044b! \u0412\u043e\u0442 \u0432\u0430\u0448\u0430 \u0441\u0441\u044b\u043b\u043a\u0430:\nhttps://teletype.in/@coinstart/guidestart10")
+        await message.answer(f"✅ Вы подписаны! Вот ваша ссылка:\n{REWARD_LINK}")
     else:
         await message.answer(
-            f"\u2757 \u0427\u0442\u043e\u0431\u044b \u043f\u043e\u043b\u0443\u0447\u0438\u0442\u044c \u0434\u043e\u0441\u0442\u0443\u043f, \u043f\u043e\u0434\u043f\u0438\u0448\u0438\u0442\u0435\u0441\u044c \u043d\u0430 {CHANNEL_USERNAME} \u0438 \u043d\u0430\u0436\u043c\u0438\u0442\u0435 \u043a\u043d\u043e\u043f\u043a\u0443 \u043d\u0438\u0436\u0435:",
+            f"❗ Чтобы получить доступ, подпишитесь на {CHANNEL_USERNAME} и нажмите кнопку ниже:",
             reply_markup=check_sub_button
         )
 
@@ -80,9 +81,9 @@ async def handle_check_sub(callback: CallbackQuery):
     user_id = callback.from_user.id
 
     if await is_subscribed(user_id):
-        await callback.message.edit_text("\u2705 \u041f\u043e\u0434\u043f\u0438\u0441\u043a\u0430 \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0430!\n\u0412\u043e\u0442 \u0432\u0430\u0448\u0430 \u0441\u0441\u044b\u043b\u043a\u0430: https://teletype.in/@coinstart/guidestart10")
+        await callback.message.edit_text(f"✅ Подписка подтверждена!\nВот ваша ссылка: {REWARD_LINK}")
     else:
-        await callback.answer("\u274c \u0412\u044b \u0435\u0449\u0451 \u043d\u0435 \u043f\u043e\u0434\u043f\u0438\u0441\u0430\u043b\u0438\u0441\u044c", show_alert=True)
+        await callback.answer("❌ Вы ещё не подписались", show_alert=True)
 
 # ==== /broadcast ====
 @dp.message(Command("broadcast"))
@@ -92,30 +93,30 @@ async def broadcast(message: Message):
 
     text = message.text.replace("/broadcast", "").strip()
     if not text:
-        await message.answer("\u2757 \u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435 \u043f\u043e\u0441\u043b\u0435 \u043a\u043e\u043c\u0430\u043d\u0434\u044b:\n\u041d\u0430\u043f\u0440\u0438\u043c\u0435\u0440: /broadcast \u041f\u0440\u0438\u0432\u0435\u0442 \u0432\u0441\u0435\u043c!")
+        await message.answer("❗ Введите сообщение после команды:\nНапример: /broadcast Привет всем!")
         return
 
-users = get_all_users()
-sent = 0
-for user_id in users:
-    try:
+    users = get_all_users()
+    sent = 0
+    for user_id in users:
+        try:
             await bot.send_message(user_id, text)
             sent += 1
         except:
             continue
 
-    await message.answer(f"\u2705 \u041e\u0442\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u043e {sent} \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044f\u043c.")
+    await message.answer(f"✅ Отправлено {sent} пользователям.")
 
 # ==== WEBHOOK ====
 async def on_startup(bot: Bot):
     webhook_url = os.getenv("WEBHOOK_URL")
     await bot.set_webhook(webhook_url)
-    print(f"\u2705 Webhook установлен: {webhook_url}")
+    print(f"✅ Webhook установлен: {webhook_url}")
 
 async def on_shutdown(bot: Bot):
     await bot.delete_webhook()
     await bot.session.close()
-    print("\u274c Webhook удалён")
+    print("❌ Webhook удалён")
 
 async def handle_webhook(request):
     data = await request.json()
@@ -123,7 +124,7 @@ async def handle_webhook(request):
     await dp.feed_update(bot, update)
     return web.Response()
 
-# ==== ОБРАБОТКА ГЛАВНОЙ СТРАНИЦЫ ДЛЯ ПРОВЕРКИ UPTIME ====
+# ==== ГЛАВНАЯ СТРАНИЦА ====
 async def handle_root(request):
     return web.Response(text="✅ Bot is alive!")
 
@@ -131,12 +132,13 @@ async def handle_root(request):
 init_db()
 app = web.Application()
 app.router.add_post('/webhook', handle_webhook)
-app.router.add_get("/", handle_root)  # для проверки Render
+app.router.add_get("/", handle_root)
 app.on_startup.append(lambda app: on_startup(bot))
 app.on_shutdown.append(lambda app: on_shutdown(bot))
 
-if name == "main":
+if __name__ == "__main__":
     web.run_app(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))
+
 
 
    
